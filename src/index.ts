@@ -10,10 +10,10 @@ import {
 import axios, { AxiosInstance } from "axios";
 
 // Environment configuration
-const SEARXNG_URL = process.env.SEARXNG_URL || "http://localhost:8888";
-const SEARXNG_KEY = process.env.SEARXNG_KEY;
-const FIRECRAWL_URL = process.env.FIRECRAWL_URL;
-const FIRECRAWL_KEY = process.env.FIRECRAWL_KEY;
+const SEARXNG_URL = process.env.SEARXNG_API_URL || "http://localhost:8888";
+const SEARXNG_KEY = process.env.SEARXNG_API_KEY;
+const FIRECRAWL_URL = process.env.FIRECRAWL_API_URL;
+const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY;
 
 // Interfaces
 interface SearXNGResult {
