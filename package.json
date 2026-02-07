@@ -1,0 +1,26 @@
+{
+  "name": "searxng-firecrawl-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for SearXNG with optional Firecrawl integration",
+  "type": "module",
+  "bin": {
+    "searxng-firecrawl-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "watch": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.6",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
