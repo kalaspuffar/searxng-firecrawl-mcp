@@ -37,8 +37,8 @@ npm install -g .
       "command": "node",
       "args": ["/path/to/searxng-firecrawl-mcp/dist/index.js"],
       "env": {
-        "SEARXNG_URL": "http://localhost:8888",
-        "SEARXNG_KEY": "your-optional-key"
+        "SEARXNG_API_URL": "http://localhost:8888",
+        "SEARXNG_API_KEY": "your-optional-key"
       }
     }
   }
@@ -54,10 +54,11 @@ npm install -g .
       "command": "node",
       "args": ["/path/to/searxng-firecrawl-mcp/dist/index.js"],
       "env": {
-        "SEARXNG_URL": "http://localhost:8888",
-        "SEARXNG_KEY": "your-optional-key",
-        "FIRECRAWL_URL": "http://localhost:3002",
-        "FIRECRAWL_KEY": "your-optional-firecrawl-key"
+        "SEARXNG_API_URL": "http://localhost:8888",
+        "SEARXNG_API_KEY": "your-optional-key",
+        "FIRECRAWL_API_URL": "http://localhost:3002",
+        "FIRECRAWL_API_KEY": "your-optional-firecrawl-key",
+        "FIRECRAWL_VERSION": "v2"
       }
     }
   }
@@ -72,7 +73,7 @@ npm install -g .
     "searxng": {
       "command": "searxng-firecrawl-mcp",
       "env": {
-        "SEARXNG_URL": "http://localhost:8888"
+        "SEARXNG_API_URL": "http://localhost:8888"
       }
     }
   }
@@ -83,10 +84,11 @@ npm install -g .
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `SEARXNG_URL` | No | `http://localhost:8888` | Your SearXNG instance URL |
-| `SEARXNG_KEY` | No | - | Optional API key for SearXNG |
-| `FIRECRAWL_URL` | No | - | Firecrawl server URL (enables Firecrawl) |
-| `FIRECRAWL_KEY` | No | - | Optional Firecrawl API key |
+| `SEARXNG_API_URL` | No | `http://localhost:8888` | Your SearXNG instance URL |
+| `SEARXNG_API_KEY` | No | - | Optional API key for SearXNG |
+| `FIRECRAWL_API_URL` | No | - | Firecrawl server URL (enables Firecrawl) |
+| `FIRECRAWL_API_KEY` | No | - | Optional Firecrawl API key |
+| `FIRECRAWL_VERSION` | No | `v1` | Firecrawl API version: `v1` or `v2` |
 
 ## Tools
 
@@ -157,7 +159,7 @@ This means you're using the old `mcp-searxng` package. This implementation fixes
 
 ### Firecrawl not working
 
-Firecrawl is optional. If `FIRECRAWL_URL` is not set, the server automatically falls back to basic HTTP scraping. Check the server logs to confirm which mode is active.
+Firecrawl is optional. If `FIRECRAWL_API_URL` is not set, the server automatically falls back to basic HTTP scraping. Check the server logs to confirm which mode is active.
 
 ### Connection refused
 

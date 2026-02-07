@@ -9,7 +9,7 @@
       "command": "node",
       "args": ["/absolute/path/to/searxng-firecrawl-mcp/dist/index.js"],
       "env": {
-        "SEARXNG_URL": "http://localhost:8888"
+        "SEARXNG_API_URL": "http://localhost:8888"
       }
     }
   }
@@ -25,8 +25,8 @@
       "command": "node",
       "args": ["/absolute/path/to/searxng-firecrawl-mcp/dist/index.js"],
       "env": {
-        "SEARXNG_URL": "http://localhost:8888",
-        "SEARXNG_KEY": "your-secret-key-here"
+        "SEARXNG_API_URL": "http://localhost:8888",
+        "SEARXNG_API_KEY": "your-secret-key-here"
       }
     }
   }
@@ -42,10 +42,10 @@
       "command": "node",
       "args": ["/absolute/path/to/searxng-firecrawl-mcp/dist/index.js"],
       "env": {
-        "SEARXNG_URL": "http://localhost:8888",
-        "SEARXNG_KEY": "searxng-key",
-        "FIRECRAWL_URL": "http://localhost:3002",
-        "FIRECRAWL_KEY": "firecrawl-key"
+        "SEARXNG_API_URL": "http://localhost:8888",
+        "SEARXNG_API_KEY": "searxng-key",
+        "FIRECRAWL_API_URL": "http://localhost:3002",
+        "FIRECRAWL_API_KEY": "firecrawl-key"
       }
     }
   }
@@ -65,7 +65,7 @@ npm install -g .
     "searxng": {
       "command": "searxng-firecrawl-mcp",
       "env": {
-        "SEARXNG_URL": "http://localhost:8888"
+        "SEARXNG_API_URL": "http://localhost:8888"
       }
     }
   }

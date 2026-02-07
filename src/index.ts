@@ -10,10 +10,11 @@ import {
 import axios, { AxiosInstance } from "axios";
 
 // Environment configuration
-const SEARXNG_URL = process.env.SEARXNG_API_URL || "http://localhost:8888";
-const SEARXNG_KEY = process.env.SEARXNG_API_KEY;
-const FIRECRAWL_URL = process.env.FIRECRAWL_API_URL;
-const FIRECRAWL_KEY = process.env.FIRECRAWL_API_KEY;
+const SEARXNG_API_URL = process.env.SEARXNG_API_URL || "http://localhost:8888";
+const SEARXNG_API_KEY = process.env.SEARXNG_API_KEY;
+const FIRECRAWL_API_URL = process.env.FIRECRAWL_API_URL;
+const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY;
+const FIRECRAWL_VERSION = process.env.FIRECRAWL_VERSION || "v1"; // Default to v1 for backwards compatibility
 
 // Interfaces
 interface SearXNGResult {
@@ -62,12 +63,12 @@ const createSearXNGClient = (): AxiosInstance => {
     "User-Agent": "SearXNG-MCP-Server/1.0",
   };
 
-  if (SEARXNG_KEY) {
-    headers["Authorization"] = `Bearer ${SEARXNG_KEY}`;
+  if (SEARXNG_API_KEY) {
+    headers["Authorization"] = `Bearer ${SEARXNG_API_KEY}`;
   }
 
   return axios.create({
-    baseURL: SEARXNG_URL,
+    baseURL: SEARXNG_API_URL,
     headers,
     timeout: 30000,
   });
@@ -75,18 +76,18 @@ const createSearXNGClient = (): AxiosInstance => {
 
 // Create axios instance for Firecrawl
 const createFirecrawlClient = (): AxiosInstance | null => {
-  if (!FIRECRAWL_URL) return null;
+  if (!FIRECRAWL_API_URL) return null;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  if (FIRECRAWL_KEY) {
-    headers["Authorization"] = `Bearer ${FIRECRAWL_KEY}`;
+  if (FIRECRAWL_API_KEY) {
+    headers["Authorization"] = `Bearer ${FIRECRAWL_API_KEY}`;
   }
 
   return axios.create({
-    baseURL: FIRECRAWL_URL,
+    baseURL: FIRECRAWL_API_URL,
     headers,
     timeout: 30000,
   });
@@ -126,7 +127,9 @@ async function searchSearXNG(params: SearchParams): Promise<SearXNGResponse> {
 async function scrapeURL(url: string): Promise<string> {
   if (firecrawlClient) {
     try {
-      const response = await firecrawlClient.post<FirecrawlResponse>("/scrape", {
+      // v2 uses /v2/scrape, v1 uses /scrape
+      const endpoint = FIRECRAWL_VERSION === "v2" ? "/v2/scrape" : "/scrape";
+      const response = await firecrawlClient.post<FirecrawlResponse>(endpoint, {
         url,
         formats: ["markdown"],
       });
@@ -241,7 +244,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     if (name === "search") {
-      const params = args as SearchParams;
+      if (!args || typeof args !== "object" || !("query" in args)) {
+        throw new Error("Missing required parameter: query");
+      }
+      const params = args as unknown as SearchParams;
       const results = await searchSearXNG(params);
 
       return {
@@ -255,7 +261,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     if (name === "scrape") {
-      const { url } = args as { url: string };
+      if (!args || typeof args !== "object" || !("url" in args)) {
+        throw new Error("Missing required parameter: url");
+      }
+      const { url } = args as unknown as { url: string };
       const content = await scrapeURL(url);
 
       return {
@@ -285,8 +294,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // Start server
 async function main() {
   console.error("SearXNG + Firecrawl MCP Server");
-  console.error(`SearXNG URL: ${SEARXNG_URL}`);
-  console.error(`Firecrawl: ${FIRECRAWL_URL ? "Enabled" : "Disabled (using fallback)"}`);
+  console.error(`SearXNG URL: ${SEARXNG_API_URL}`);
+  console.error(`Firecrawl: ${FIRECRAWL_API_URL ? `Enabled (${FIRECRAWL_VERSION})` : "Disabled (using fallback)"}`);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
